@@ -14,6 +14,7 @@ import {
   Unlock
 } from "lucide-react";
 import { useProjectStore } from "@/lib/store/projectStore";
+import GoogleSheetsSync from "./universal/GoogleSheetsSync";
 
 interface CloudConsoleProps {
   projectId: string;
@@ -95,7 +96,8 @@ export default function CloudConsole({ projectId }: CloudConsoleProps) {
           </button>
         </div>
 
-        <div className="text-[10px] text-zinc-500 font-mono flex items-center gap-1">
+        <div className="text-[10px] text-zinc-500 font-mono flex items-center gap-3">
+          <GoogleSheetsSync sheetTitle={`a0-clone Database Export - ${selectedTableName}`} getData={() => currentTable?.rows || []} />
           <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
           <span>db_schema_tenant_{project.id}</span>
         </div>

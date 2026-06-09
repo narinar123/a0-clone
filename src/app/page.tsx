@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { 
   Sparkles, 
@@ -13,27 +16,30 @@ import {
   Play, 
   CheckCircle2 
 } from "lucide-react";
+import BillingModal from "@/components/universal/BillingModal";
+import SocialShare from "@/components/universal/SocialShare";
 
 export default function LandingPage() {
+  const [isBillingOpen, setIsBillingOpen] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen bg-[#070709] text-zinc-100 selection:bg-blue-600/30 overflow-hidden">
-      
+      <BillingModal isOpen={isBillingOpen} onClose={() => setIsBillingOpen(false)} userEmail="candidate@example.com" />
+
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#070709]/80 backdrop-blur-md">
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold text-lg shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-              a0
-            </div>
+          <div className="flex items-center gap-2.5">
+            <img src="https://www.gsgroups.net/gslogo.png" alt="GS Logo" className="w-8 h-8 object-contain" />
             <span className="font-outfit text-xl font-bold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-              a0.dev
+              GSQODER.AI
             </span>
           </div>
 
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+            <button onClick={() => setIsBillingOpen(true)} className="hover:text-white transition-colors">Pricing</button>
             <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Docs</a>
           </nav>
 
@@ -54,6 +60,7 @@ export default function LandingPage() {
           </div>
         </div>
       </header>
+
 
       {/* Hero Section */}
       <section className="relative pt-24 pb-20 md:pt-32 md:pb-28">
@@ -274,14 +281,14 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-white/5 py-12 bg-black/40">
         <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold text-sm">
-              a0
-            </div>
+          <div className="flex items-center gap-2.5">
+            <img src="https://www.gsgroups.net/gslogo.png" alt="GS Logo" className="w-5 h-5 object-contain" />
             <span className="font-outfit text-sm font-semibold tracking-tight text-zinc-400">
-              a0.dev clone
+              GSQODER.AI App Builder
             </span>
           </div>
+
+          <SocialShare shareUrl="https://a0-clone.vercel.app" title="GSQODER.AI App Builder" />
 
           <p className="text-xs text-zinc-600">
             &copy; {new Date().getFullYear()} a0.dev. All rights reserved. Built for pair-programming demonstration.

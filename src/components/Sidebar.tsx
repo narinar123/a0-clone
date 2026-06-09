@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import { 
   Home, 
   Grid, 
@@ -11,9 +12,23 @@ import {
   Share2, 
   ChevronRight
 } from "lucide-react";
+import BillingModal from "./universal/BillingModal";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [isBillingOpen, setIsBillingOpen] = useState(false);
+  const [user, setUser] = useState<{name: string; email: string} | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("google_user");
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse stored user", e);
+      }
+    }
+  }, []);
 
   const navItems = [
     { name: "Home", href: "/home", icon: Home },
@@ -22,17 +37,20 @@ export default function Sidebar() {
     { name: "Support", href: "#", icon: HelpCircle },
   ];
 
+  const displayName = user ? user.name : "Candidate Profile";
+  const displayEmail = user ? user.email : "candidate@example.com";
+  const displayInitials = displayName.slice(0, 2).toUpperCase();
+
   return (
     <aside className="w-64 border-r border-white/5 bg-[#0b0b0f] flex flex-col h-screen sticky top-0 shrink-0">
-      
+      <BillingModal isOpen={isBillingOpen} onClose={() => setIsBillingOpen(false)} userEmail={displayEmail} />
+
       {/* Brand Logo */}
       <div className="h-16 flex items-center px-6 border-b border-white/5 gap-2.5">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center font-bold text-sm shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-            a0
-          </div>
+        <Link href="/" className="flex items-center gap-2.5">
+          <img src="https://www.gsgroups.net/gslogo.png" alt="GS Logo" className="w-7 h-7 object-contain" />
           <span className="font-outfit text-lg font-bold bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
-            a0.dev
+            GSQODER.AI
           </span>
         </Link>
       </div>
@@ -86,7 +104,7 @@ export default function Sidebar() {
           <p className="text-[11px] text-zinc-400 mt-1 leading-relaxed">
             Unlock unlimited deployments, faster agents, and custom domains.
           </p>
-          <button className="w-full mt-3 py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition-colors shadow-sm">
+          <button onClick={() => setIsBillingOpen(true)} className="w-full mt-3 py-1.5 px-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs transition-colors shadow-sm">
             Upgrade Now
           </button>
         </div>
@@ -94,19 +112,19 @@ export default function Sidebar() {
 
       {/* Profile Card */}
       <div className="p-4 border-t border-white/5 flex items-center justify-between bg-black/40">
-        <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-blue-600 to-pink-500 p-0.5 shadow-sm">
-            <div className="h-full w-full rounded-full bg-zinc-950 flex items-center justify-center text-xs font-semibold text-white">
-              JD
+        <div className="flex items-center gap-3 max-w-[75%]">
+          <div className="h-9 w-9 rounded-full bg-gradient-to-tr from-blue-600 to-pink-500 p-0.5 shadow-sm shrink-0">
+            <div className="h-full w-full rounded-full bg-zinc-950 flex items-center justify-center text-[10px] font-semibold text-white">
+              {displayInitials}
             </div>
           </div>
-          <div>
-            <p className="text-xs font-semibold text-zinc-200">John Doe</p>
-            <p className="text-[10px] text-zinc-500">john@a0.dev</p>
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-zinc-200 truncate">{displayName}</p>
+            <p className="text-[10px] text-zinc-500 truncate">{displayEmail}</p>
           </div>
         </div>
-        <div className="flex h-5 items-center gap-1 rounded bg-zinc-800/60 px-1.5 text-[10px] font-medium text-zinc-400">
-          <span>Free</span>
+        <div className="flex h-5 items-center gap-1 rounded bg-zinc-800/60 px-1.5 text-[10px] font-medium text-zinc-400 shrink-0">
+          <span>Premium</span>
         </div>
       </div>
 
